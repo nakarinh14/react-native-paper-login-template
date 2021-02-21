@@ -58,11 +58,11 @@ const Calculator = () => {
     const [currentOper, setOperation] = useState("");
 
     const onClickNum = (val) => {
-        // Validate "." doesn't occur more than once.
+        // Validate that "." doesn't occur more than once.
         if(val === "." && currentVal.includes(".")){
             return
         }
-        let newVal = currentVal + val.toString()
+        let newVal = currentVal + val
         if(newVal === "."){
             newVal = "0."
         }
@@ -70,8 +70,10 @@ const Calculator = () => {
         setDisplayVal(newVal)
     }
     const onClickOper = (oper) => {
-        // If there is existing num and existing currentVal, calculate new val.
-        calculateNewNum();
+        // If there is an existing currentVal, calculate new val.
+        if(currentVal){
+            calculateNewNum();
+        }
         // Set new operation in the end
         setOperation(oper);
     }
@@ -87,13 +89,16 @@ const Calculator = () => {
         if(!currentVal){
             return;
         }
-        // If there is an existing operation with a currentVal, do a calculation.
-        const result = (num ? calculateNumber(num, currentVal, currentOper) : currentVal).toString();
+        // If there is an existing operation, do a calculation.
+        const result = (num && currentOper ?
+            calculateNumber(num, currentVal, currentOper) : currentVal).toString();
+
         setCurrentVal("");
         setNum(result);
         setDisplayVal(result)
         setOperation(null)
     }
+
     return (
         <View style={styles.container}>
             <View style={styles.numberDisplay}>
@@ -105,7 +110,7 @@ const Calculator = () => {
             </View>
 
             <View style={styles.row}>
-                {[7,8,9].map(n => (
+                {["7","8","9"].map(n => (
                     <TouchableOpacity
                         key={n}
                         style={[styles.box]}
@@ -122,7 +127,7 @@ const Calculator = () => {
                 </TouchableOpacity>
             </View>
             <View style={styles.row}>
-                {[4,5,6].map(n => (
+                {["4","5","6"].map(n => (
                     <TouchableOpacity
                         key={n}
                         style={[styles.box]}
@@ -139,7 +144,7 @@ const Calculator = () => {
                 </TouchableOpacity>
             </View>
             <View style={styles.row}>
-                {[1,2,3].map(n => (
+                {["1","2","3"].map(n => (
                     <TouchableOpacity
                         style={[styles.box]}
                         key={n}
