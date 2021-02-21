@@ -1,86 +1,113 @@
 import React, { memo } from 'react';
 import {StyleSheet, View, Text} from "react-native";
-import {white} from "react-native-paper/lib/typescript/styles/colors";
 
 const styles = StyleSheet.create({
     numberDisplay:{
-        flex: 2.7,
+        flex: 2.4,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 10
+        marginBottom: 5
     },
     displayText: {
-      fontSize: 90,
+        fontSize: 90,
         color: 'white',
         marginRight: 15
+    },
+    buttonText: {
+        fontSize: 45,
+        color: 'white',
     },
     container: {
         flex: 1,
         flexDirection: 'column',
+        backgroundColor: 'grey'
     },
     row: {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 5
     },
     displayBox:{
         flex: 1,
         backgroundColor: '#333',
-        justifyContent: 'flex-end', /* center items vertically, in this case */
-        alignItems: 'flex-end',     /* center items horizontally, in this case */
+        justifyContent: 'flex-end',
+        alignItems: 'flex-end',
     },
     box: {
         flex: 1,
         backgroundColor: '#333',
         justifyContent: 'center', /* center items vertically, in this case */
         alignItems: 'center',     /* center items horizontally, in this case */
+        borderStyle: 'solid',
+        borderWidth: 1,
+        borderColor: 'grey',
     },
-    box2: {
-        backgroundColor: 'green'
-    },
-    box3: {
+    arithmeticBox: {
         backgroundColor: 'orange'
     },
-    two: {
-        flex: 2
+    acBox: {
+        backgroundColor:'darkgrey',
     }
 });
 
-const Calculator = () => (
-    <View style={styles.container}>
-        <View style={styles.numberDisplay}>
-            <View style={[styles.displayBox]}>
-                <Text style={styles.displayText}>
-                    12.85
-                </Text>
+const Calculator = () => {
+    const firstRowNum = [7,8,9]
+    const secondRowNum = [4,5,6]
+    const thirdRowNum = [1,2,3]
+    const fourthRowNum = [0, '.']
+    return (
+        <View style={styles.container}>
+            <View style={styles.numberDisplay}>
+                <View style={[styles.displayBox]}>
+                    <Text style={styles.displayText}>
+                        12.85
+                    </Text>
+                </View>
+            </View>
+
+            <View style={styles.row}>
+                {firstRowNum.map(n => (
+                    <View style={[styles.box]}>
+                        <Text style={[styles.buttonText]}>{n}</Text>
+                    </View>
+                ))}
+                <View style={[styles.box, styles.acBox]}>
+                    <Text style={[styles.buttonText]}>AC</Text>
+                </View>
+            </View>
+            <View style={styles.row}>
+                {secondRowNum.map(n => (
+                    <View style={[styles.box]}>
+                        <Text style={[styles.buttonText]}>{n}</Text>
+                    </View>
+                ))}
+                <View style={[styles.box, styles.arithmeticBox]}>
+                    <Text style={[styles.buttonText]}>+</Text>
+                </View>
+            </View>
+            <View style={styles.row}>
+                {thirdRowNum.map(n => (
+                    <View style={[styles.box]}>
+                        <Text style={[styles.buttonText]}>{n}</Text>
+                    </View>
+                ))}
+                <View style={[styles.box, styles.arithmeticBox]}>
+                    <Text style={[styles.buttonText]}>-</Text>
+                </View>
+            </View>
+            <View style={styles.row}>
+                {fourthRowNum.map(n => (
+                    <View style={[styles.box]}>
+                        <Text style={[styles.buttonText]}>{n}</Text>
+                    </View>
+                ))}
+                <View style={[styles.box, {flex: 2, backgroundColor: 'lightblue'}]}>
+                    <Text style={[styles.buttonText]}>=</Text>
+                </View>
             </View>
         </View>
-
-        <View style={styles.row}>
-            <View style={[styles.box, styles.box2]}/>
-            <View style={[styles.box]}/>
-            <View style={[styles.box, styles.box3]}/>
-        </View>
-        <View style={styles.row}>
-            <View style={[styles.box, styles.box2]}/>
-            <View style={[styles.box]}/>
-            <View style={[styles.box, styles.box3]}/>
-        </View>
-        <View style={styles.row}>
-            <View style={[styles.box, styles.box2]}/>
-            <View style={[styles.box]}/>
-            <View style={[styles.box, styles.box3]}/>
-        </View>
-
-        <View style={styles.row}>
-            <View style={[styles.box, styles.box2]}/>
-            <View style={[styles.box]}/>
-        </View>
-    </View>
-);
-
-
+    )
+};
 
 export default memo(Calculator);
 
