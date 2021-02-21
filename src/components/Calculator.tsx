@@ -1,9 +1,10 @@
-import React, { memo } from 'react';
-import {StyleSheet, View, Text} from "react-native";
+import React, {memo, useState} from 'react';
+import {StyleSheet, View, Text, TouchableOpacity} from "react-native";
+import {calculateNumber} from "../core/calculator";
 
 const styles = StyleSheet.create({
     numberDisplay:{
-        flex: 2.4,
+        flex: 1.9,
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 5
@@ -51,59 +52,125 @@ const styles = StyleSheet.create({
 });
 
 const Calculator = () => {
-    const firstRowNum = [7,8,9]
-    const secondRowNum = [4,5,6]
-    const thirdRowNum = [1,2,3]
-    const fourthRowNum = [0, '.']
+    const [currentVal, setCurrentVal] = useState("");
+    const [num, setNum] = useState("");
+    const [displayVal, setDisplayVal] = useState("0");
+    const [currentOper, setOperation] = useState("");
+
+    const onClickNum = (val) => {
+        // Validate "." doesn't occur more than once.
+        if(val === "." && currentVal.includes(".")){
+            return
+        }
+        let newVal = currentVal + val.toString()
+        if(newVal === "."){
+            newVal = "0."
+        }
+        setCurrentVal(newVal)
+        setDisplayVal(newVal)
+    }
+    const onClickOper = (oper) => {
+        // If there is existing num and existing currentVal, calculate new val.
+        calculateNewNum();
+        // Set new operation in the end
+        setOperation(oper);
+    }
+    const resetCalculator = () => {
+        // AC reset everything
+        setNum("");
+        setCurrentVal("");
+        setDisplayVal("0");
+        setOperation("");
+    }
+    const calculateNewNum = () => {
+        // If currentVal doesnt exist, don't do anything
+        if(!currentVal){
+            return;
+        }
+        // If there is an existing operation with a currentVal, do a calculation.
+        const result = (num ? calculateNumber(num, currentVal, currentOper) : currentVal).toString();
+        setCurrentVal("");
+        setNum(result);
+        setDisplayVal(result)
+        setOperation(null)
+    }
     return (
         <View style={styles.container}>
             <View style={styles.numberDisplay}>
                 <View style={[styles.displayBox]}>
                     <Text style={styles.displayText}>
-                        12.85
+                        {displayVal}
                     </Text>
                 </View>
             </View>
 
             <View style={styles.row}>
-                {firstRowNum.map(n => (
-                    <View style={[styles.box]}>
+                {[7,8,9].map(n => (
+                    <TouchableOpacity
+                        key={n}
+                        style={[styles.box]}
+                        onPress={() => onClickNum(n)}
+                    >
                         <Text style={[styles.buttonText]}>{n}</Text>
-                    </View>
+                    </TouchableOpacity>
                 ))}
-                <View style={[styles.box, styles.acBox]}>
+                <TouchableOpacity
+                    style={[styles.box, styles.acBox]}
+                    onPress={resetCalculator}
+                >
                     <Text style={[styles.buttonText]}>AC</Text>
-                </View>
+                </TouchableOpacity>
             </View>
             <View style={styles.row}>
-                {secondRowNum.map(n => (
-                    <View style={[styles.box]}>
+                {[4,5,6].map(n => (
+                    <TouchableOpacity
+                        key={n}
+                        style={[styles.box]}
+                        onPress={() => onClickNum(n)}
+                    >
                         <Text style={[styles.buttonText]}>{n}</Text>
-                    </View>
+                    </TouchableOpacity>
                 ))}
-                <View style={[styles.box, styles.arithmeticBox]}>
+                <TouchableOpacity
+                    style={[styles.box, styles.arithmeticBox]}
+                    onPress={() => onClickOper("+")}
+                >
                     <Text style={[styles.buttonText]}>+</Text>
-                </View>
+                </TouchableOpacity>
             </View>
             <View style={styles.row}>
-                {thirdRowNum.map(n => (
-                    <View style={[styles.box]}>
+                {[1,2,3].map(n => (
+                    <TouchableOpacity
+                        style={[styles.box]}
+                        key={n}
+                        onPress={() => onClickNum(n)}
+                    >
                         <Text style={[styles.buttonText]}>{n}</Text>
-                    </View>
+                    </TouchableOpacity>
                 ))}
-                <View style={[styles.box, styles.arithmeticBox]}>
+                <TouchableOpacity
+                    style={[styles.box, styles.arithmeticBox]}
+                    onPress={() => onClickOper("-")}
+                >
                     <Text style={[styles.buttonText]}>-</Text>
-                </View>
+                </TouchableOpacity>
             </View>
             <View style={styles.row}>
-                {fourthRowNum.map(n => (
-                    <View style={[styles.box]}>
+                {[0,'.'].map(n => (
+                    <TouchableOpacity
+                        style={[styles.box]}
+                        key={n}
+                        onPress={() => onClickNum(n)}
+                    >
                         <Text style={[styles.buttonText]}>{n}</Text>
-                    </View>
+                    </TouchableOpacity>
                 ))}
-                <View style={[styles.box, {flex: 2, backgroundColor: 'lightblue'}]}>
+                <TouchableOpacity
+                    style={[styles.box, {flex: 2, backgroundColor: 'lightblue'}]}
+                    onPress={calculateNewNum}
+                >
                     <Text style={[styles.buttonText]}>=</Text>
-                </View>
+                </TouchableOpacity>
             </View>
         </View>
     )
