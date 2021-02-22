@@ -70,21 +70,14 @@ const LoginScreen = ({ navigation }: Props) => {
         error={!!password.error}
         errorText={password.error}
         secureTextEntry
+        style={styles.textIn}
       />
 
       <Text style={styles.error}>
         {errormsg}
       </Text>
 
-      <View style={styles.forgotPassword}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('ForgotPasswordScreen')}
-        >
-          <Text style={styles.label}>Forgot your password?</Text>
-        </TouchableOpacity>
-      </View>
-
-      <Button mode="contained" onPress={_onLoginPressed} disabled={buttonDisabled}>
+      <Button color='#E31C49' mode="contained" onPress={_onLoginPressed} disabled={buttonDisabled}>
         Login
       </Button>
 
@@ -99,11 +92,6 @@ const LoginScreen = ({ navigation }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  forgotPassword: {
-    width: '100%',
-    alignItems: 'flex-end',
-    marginBottom: 24,
-  },
   row: {
     flexDirection: 'row',
     marginTop: 4,
@@ -118,6 +106,9 @@ const styles = StyleSheet.create({
   error: {
     color: 'red',
     fontSize: 10
+  },
+  textIn: {
+    borderColor: '#000000'
   }
 });
 
