@@ -1,14 +1,16 @@
-const preciseOperation = f => (a, b, decimalDigits) => {
-    decimalDigits = decimalDigits || 12 + (f(a, b)).toFixed(decimalDigits)
-}
+import Decimal from 'decimal.js/decimal';
 
 export const calculateNumber = (a, b, operator) => {
-    let _a = Number(a)
-    let _b = Number(b)
+    const _a = new Decimal(a)
+    const _b = new Decimal(b)
     switch (operator){
         case "+":
-            return _a + _b
+            return _a.plus(_b).toString()
         case "-":
-            return _a - _b
+            return _a.minus(_b).toString()
+        case "*":
+            return _a.times(_b).toString()
+        case "/":
+            return _a.div(_b).toString()
     }
 }
