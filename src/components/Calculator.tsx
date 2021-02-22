@@ -1,6 +1,8 @@
 import React, {memo, useState} from 'react';
 import {StyleSheet, View, Text, TouchableOpacity} from "react-native";
 import {calculateNumber} from "../core/calculator";
+import BackButton from "./BackButton";
+import {Navigation} from "../types";
 
 const styles = StyleSheet.create({
     numberDisplay:{
@@ -51,7 +53,11 @@ const styles = StyleSheet.create({
     }
 });
 
-const Calculator = () => {
+type Props = {
+    navigation: Navigation;
+};
+
+const Calculator = ({ navigation }: Props) => {
     const [currentVal, setCurrentVal] = useState("");
     const [num, setNum] = useState("");
     const [displayVal, setDisplayVal] = useState("0");
@@ -101,6 +107,7 @@ const Calculator = () => {
 
     return (
         <View style={styles.container}>
+            <BackButton goBack={() => navigation.navigate('HomeScreen')} />
             <View style={styles.numberDisplay}>
                 <View style={[styles.displayBox]}>
                     <Text style={styles.displayText}>
@@ -108,7 +115,20 @@ const Calculator = () => {
                     </Text>
                 </View>
             </View>
-
+            <View style={styles.row}>
+                <TouchableOpacity
+                    style={[styles.box, styles.acBox, {flex: 3}]}
+                    onPress={resetCalculator}
+                >
+                    <Text style={[styles.buttonText]}>AC</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={[styles.box, styles.arithmeticBox]}
+                    onPress={() => onClickOper("/")}
+                >
+                    <Text style={[styles.buttonText]}>/</Text>
+                </TouchableOpacity>
+            </View>
             <View style={styles.row}>
                 {["7","8","9"].map(n => (
                     <TouchableOpacity
@@ -120,10 +140,10 @@ const Calculator = () => {
                     </TouchableOpacity>
                 ))}
                 <TouchableOpacity
-                    style={[styles.box, styles.acBox]}
-                    onPress={resetCalculator}
+                    style={[styles.box, styles.arithmeticBox]}
+                    onPress={() => onClickOper("*")}
                 >
-                    <Text style={[styles.buttonText]}>AC</Text>
+                    <Text style={[styles.buttonText]}>*</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.row}>
@@ -138,9 +158,9 @@ const Calculator = () => {
                 ))}
                 <TouchableOpacity
                     style={[styles.box, styles.arithmeticBox]}
-                    onPress={() => onClickOper("+")}
+                    onPress={() => onClickOper("-")}
                 >
-                    <Text style={[styles.buttonText]}>+</Text>
+                    <Text style={[styles.buttonText]}>-</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.row}>
@@ -155,9 +175,9 @@ const Calculator = () => {
                 ))}
                 <TouchableOpacity
                     style={[styles.box, styles.arithmeticBox]}
-                    onPress={() => onClickOper("-")}
+                    onPress={() => onClickOper("+")}
                 >
-                    <Text style={[styles.buttonText]}>-</Text>
+                    <Text style={[styles.buttonText]}>+</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.row}>
