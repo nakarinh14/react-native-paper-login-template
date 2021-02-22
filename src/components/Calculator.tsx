@@ -141,9 +141,9 @@ const Calculator = ({ navigation }: Props) => {
                 ))}
                 <TouchableOpacity
                     style={[styles.box, styles.arithmeticBox]}
-                    onPress={() => onClickOper("*")}
+                    onPress={() => onClickOper("x")}
                 >
-                    <Text style={[styles.buttonText]}>*</Text>
+                    <Text style={[styles.buttonText]}>x</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.row}>

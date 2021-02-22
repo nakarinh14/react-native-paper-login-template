@@ -8,7 +8,7 @@ export const calculateNumber = (a, b, operator) => {
             return _a.plus(_b).toString()
         case "-":
             return _a.minus(_b).toString()
-        case "*":
+        case "x":
             return _a.times(_b).toString()
         case "/":
             return _a.div(_b).toString()
