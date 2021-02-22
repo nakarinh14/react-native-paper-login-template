@@ -9,14 +9,18 @@ import BackButton from '../components/BackButton';
 import { theme } from '../core/theme';
 import { emailValidator, passwordValidator } from '../core/utils';
 import { Navigation } from '../types';
+import { firebase } from '../config/firebase'
 
 type Props = {
   navigation: Navigation;
 };
 
 const LoginScreen = ({ navigation }: Props) => {
+  const [errormsg, setErrorMsg] = useState('')
   const [email, setEmail] = useState({ value: '', error: '' });
   const [password, setPassword] = useState({ value: '', error: '' });
+  const [buttonDisabled, setButtonDisabled] = useState(false)
+
 
   const _onLoginPressed = () => {
     const emailError = emailValidator(email.value);
@@ -28,7 +32,13 @@ const LoginScreen = ({ navigation }: Props) => {
       return;
     }
 
-    navigation.navigate('Dashboard');
+    setButtonDisabled(true)
+    firebase.auth().signInWithEmailAndPassword(email.value,password.value).then(() => {
+      navigation.navigate('Dashboard')
+    }).catch(error => {
+      setErrorMsg(error.message)
+      setButtonDisabled(false)
+    })
   };
 
   return (
@@ -62,6 +72,10 @@ const LoginScreen = ({ navigation }: Props) => {
         secureTextEntry
       />
 
+      <Text style={styles.error}>
+        {errormsg}
+      </Text>
+
       <View style={styles.forgotPassword}>
         <TouchableOpacity
           onPress={() => navigation.navigate('ForgotPasswordScreen')}
@@ -70,7 +84,7 @@ const LoginScreen = ({ navigation }: Props) => {
         </TouchableOpacity>
       </View>
 
-      <Button mode="contained" onPress={_onLoginPressed}>
+      <Button mode="contained" onPress={_onLoginPressed} disabled={buttonDisabled}>
         Login
       </Button>
 
@@ -101,6 +115,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.primary,
   },
+  error: {
+    color: 'red',
+    fontSize: 10
+  }
 });
 
 export default memo(LoginScreen);

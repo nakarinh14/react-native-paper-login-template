@@ -11,31 +11,38 @@ import { Navigation } from '../types';
 import {
   emailValidator,
   passwordValidator,
-  nameValidator,
 } from '../core/utils';
+import { firebase } from '../config/firebase'
 
 type Props = {
   navigation: Navigation;
 };
 
 const RegisterScreen = ({ navigation }: Props) => {
-  const [name, setName] = useState({ value: '', error: '' });
+  const [errormsg, setErrorMsg] = useState('')
   const [email, setEmail] = useState({ value: '', error: '' });
   const [password, setPassword] = useState({ value: '', error: '' });
+  const [buttonDisabled, setButtonDisabled] = useState(false)
 
   const _onSignUpPressed = () => {
-    const nameError = nameValidator(name.value);
     const emailError = emailValidator(email.value);
     const passwordError = passwordValidator(password.value);
 
-    if (emailError || passwordError || nameError) {
-      setName({ ...name, error: nameError });
+    setErrorMsg('')
+
+    if (emailError || passwordError) {
       setEmail({ ...email, error: emailError });
       setPassword({ ...password, error: passwordError });
       return;
     }
-
-    navigation.navigate('Dashboard');
+    setButtonDisabled(true)
+    firebase.auth().createUserWithEmailAndPassword(email.value,password.value).then(() => {
+      navigation.navigate('Dashboard');
+      setButtonDisabled(false)
+    }).catch((er) => {
+      setErrorMsg(er.message)
+      setButtonDisabled(false)
+    })
   };
 
   return (
@@ -45,15 +52,6 @@ const RegisterScreen = ({ navigation }: Props) => {
       <Logo />
 
       <Header>Create Account</Header>
-
-      <TextInput
-        label="Name"
-        returnKeyType="next"
-        value={name.value}
-        onChangeText={text => setName({ value: text, error: '' })}
-        error={!!name.error}
-        errorText={name.error}
-      />
 
       <TextInput
         label="Email"
@@ -78,7 +76,11 @@ const RegisterScreen = ({ navigation }: Props) => {
         secureTextEntry
       />
 
-      <Button mode="contained" onPress={_onSignUpPressed} style={styles.button}>
+      <Text style={styles.error}>
+        {errormsg}
+      </Text>
+
+      <Button mode="contained" onPress={_onSignUpPressed} disabled={buttonDisabled} style={styles.button}>
         Sign Up
       </Button>
 
@@ -107,6 +109,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.primary,
   },
+  error: {
+    color: 'red',
+    fontSize: 10
+  }
 });
 
 export default memo(RegisterScreen);
