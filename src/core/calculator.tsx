@@ -1,4 +1,4 @@
-import Decimal from 'decimal.js/decimal';
+import Decimal from 'decimal.js';
 
 export const calculateNumber = (a, b, operator) => {
     const _a = new Decimal(a)
